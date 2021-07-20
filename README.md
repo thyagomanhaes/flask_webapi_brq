@@ -3,8 +3,9 @@
 Para rodar o app:
 
 1. Crie um ambiente com o virtualenv
->> virtualenv env
-
+```
+virtualenv env
+```
 2. Instale as dependencias do projeto usando requirements.txt
 >> pip install -r requirements.txt
 
