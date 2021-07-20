@@ -5,45 +5,43 @@ from models.residencia import ResidenciaModel
 from schemas.residencia import ResidenciaSchema
 
 from server.instance import server
+from db import db
 
-book_ns = server.book_ns
+residencia_ns = server.residencia_ns
 
 ITEM_NOT_FOUND = "Residencia not found."
 
-book_schema = ResidenciaSchema()
-book_list_schema = ResidenciaSchema(many=True)
+residencia_schema = ResidenciaSchema()
+residencia_list_schema = ResidenciaSchema(many=True)
 
 # Model required by flask_restplus for expect
-item = book_ns.model('Book', {
-    'title': fields.String('Book title'),
-    'pages': fields.Integer(0),
+item = residencia_ns.model('Residencia', {
+    'id': fields.Integer(description='id da propriedade'),
+    'like': fields.Boolean(),
 })
 
 class Residencia(Resource):
 
     def get(self, id):
-        param = request.args.get('neighbourhood_group')
-        if param:
-            print("PARAMETRO: ", param)
-        book_data = ResidenciaModel.find_by_id(id)
-        if book_data:
-            return book_schema.dump(book_data)
+        residencia_data = ResidenciaModel.find_by_id(id)
+        if residencia_data:
+            return residencia_schema.dump(residencia_data)
+        return {'message': ITEM_NOT_FOUND},404
 
 class ResidenciaList(Resource):
-    @book_ns.doc('Get all Items')
+    @residencia_ns.doc('Get all Items')
     def get(self):
         if request.args:
             args = request.args
-            return book_list_schema.dump(ResidenciaModel.find_by_field(args)), 200
+            return residencia_list_schema.dump(ResidenciaModel.find_by_field(args)), 200
         else:
-            return book_list_schema.dump(ResidenciaModel.find_all()), 200
+            return residencia_list_schema.dump(ResidenciaModel.find_all()), 200
     
-    @book_ns.expect(item)
-    @book_ns.doc('Create an Item')
+    @residencia_ns.expect(item)
+    @residencia_ns.doc('Create an Item')
     def post(self):
         residencia_json = request.get_json()
-        residencia_data = book_schema.load(residencia_json)
-
+        residencia_data = residencia_schema.load(residencia_json, session=db.session) # Transforma o dicionário em um objeto que pode ser utilizado pelo banco de dados
         residencia_data.save_to_db()
 
-        return book_schema.dump(residencia_data), 201
+        return residencia_schema.dump(residencia_data), 201

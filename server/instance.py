@@ -13,9 +13,9 @@ class Server():
         self.app.config['PROPAGATE_EXCEPTIONS'] = True
         self.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-        self.book_ns = self.book_ns()
+        self.residencia_ns = self.residencia_ns()
         
-    def book_ns(self, ):
+    def residencia_ns(self, ):
         return self.api.namespace(name='Residencias', description='residencias related operations', path='/')
     
     def run(self, ):

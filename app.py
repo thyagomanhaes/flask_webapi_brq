@@ -3,7 +3,8 @@ from marshmallow import ValidationError
 
 from ma import ma
 from db import db
-from controllers.residencia import Residencia, ResidenciaList, book_ns
+from controllers.residencia import Residencia, ResidenciaList
+from controllers.precomedio import PrecoMedio, PrecoMedioList
 
 from server.instance import server
 
@@ -16,6 +17,7 @@ def create_tables():
 
 api.add_resource(ResidenciaList, '/residencias')
 api.add_resource(Residencia, '/residencias/<int:id>')
+api.add_resource(PrecoMedioList, '/preco-medio')
 
 if __name__ == '__main__':
     db.init_app(app)
